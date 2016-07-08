@@ -3,7 +3,8 @@ WAF Testing Tool (WTT) is a small script to send attacks to application firewall
 Script supports python 2.x/3.x and should work on both windows and *nix hosts.
 
 ## Help
-```# python wtt.py --help
+```
+# python wtt.py --help
 usage: wtt.py [-h] -f PATH -u URL [-a UA] [-c COOKIE] [-o OUTPUT]
               [-t {status_code,pattern,regex}] [-p PATTERN] [--all]
               [--auth {basic,digest,http}] [--auth-url AUTH_URL]
@@ -52,34 +53,46 @@ optional arguments:
                         disable: 0)
   --report-template REPORT_TEMPLATE
                         Set jinja2 report template
-  --threads THREADS     Set threads number (default: 1)```
+  --threads THREADS     Set threads number (default: 1)
+ ```
 
 ## Usage examples
 Attacks to test OWASP Top10 attacks are located in owasp folder and are ready to use against [BeeBox VM](http://www.itsecgames.com/).
 Running script with http authentication and taking csrf tokens from X-Csrf-Token header and adding to POST-requests as "csrftoken" will looke like:
-```python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-params login=bee,password=bug,security_level=0,form=submit --auth-url http://172.16.9.34/bWAPP/login.php --auth-success Welcome.Bee --csrf --csrf-name X-Csrf-Token --csrf-sendname csrftoken -o beebox_report.html --all --threads 5```
+```
+python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-params login=bee,password=bug,security_level=0,form=submit --auth-url http://172.16.9.34/bWAPP/login.php --auth-success Welcome.Bee --csrf --csrf-name X-Csrf-Token --csrf-sendname csrftoken -o beebox_report.html --all --threads 5
+```
 
 ### Set blocked attacks criteria
-```python wtt.py -u http://protected.app.local/ -f owasp -t status_code```
-```python wtt.py -u http://protected.app.local/ -f owasp -t pattern -p Forbidden```
-```python wtt.py -u http://protected.app.local/ -f owasp -t regex -p ID:.*```
+```
+python wtt.py -u http://protected.app.local/ -f owasp -t status_code
+```python wtt.py -u http://protected.app.local/ -f owasp -t pattern -p Forbidden
+python wtt.py -u http://protected.app.local/ -f owasp -t regex -p ID:.*
+```
 
 ### Auth by setting Cookie
 ```python wtt.py -u http://172.16.9.34/ -f owasp -c PHPSESSID=1234abcd5678efgh,some_value=1```
 
 ### Basic/Digest auth
-```python wtt.py -u http://protected.app.local/ -f owasp --auth basic --auth-params login=John,password=123```
-```python wtt.py -u http://protected.app.local/ -f owasp --auth digest --auth-params login=John,password=123```
+```
+python wtt.py -u http://protected.app.local/ -f owasp --auth basic --auth-params login=John,password=123
+python wtt.py -u http://protected.app.local/ -f owasp --auth digest --auth-params login=John,password=123
+```
 
 ### HTTP auth
-```python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-url http://protected.app.local/bWAPP/login.php --auth-params login=John,password=123,form=Submit --auth-success Welcome.Bee```
+```
+python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-url http://protected.app.local/bWAPP/login.php --auth-params login=John,password=123,form=Submit --auth-success Welcome.Bee
+```
 
 ### Get CSRF token for POST-requests
-```python wtt.py -u http://protected.app.local/ -f owasp --csrf --csrf-name csrftoken```
+```
+python wtt.py -u http://protected.app.local/ -f owasp --csrf --csrf-name csrftoken
+```
 
 ## Attack template
 Attacks should be provided in JSON format and have following structure:
-```{  
+```
+{  
    "id": "OWASP_A1_21", # attack ID number
    "description": "SQL Injection (GET/Search)", # 
    "method": "GET", # HTTP-request method
@@ -91,8 +104,11 @@ Attacks should be provided in JSON format and have following structure:
    }, # list of used headers (in )
    "body": null, # body for POST-requests
    "payload": "adsf' or 1=1 -- 1" # payload in raw form
-}```
+}
+```
 
 ## Convert payloads to attack
 If you have only payloads and want to convert it into attacks format, use:
-```python payload2attacks.py -i folder_with_payloads -o folder_for_ready_attacks```
+```
+python payload2attacks.py -i folder_with_payloads -o folder_for_ready_attacks
+```

