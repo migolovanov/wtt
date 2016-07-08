@@ -66,7 +66,7 @@ python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-params 
 ### Set blocked attacks criteria
 ```
 python wtt.py -u http://protected.app.local/ -f owasp -t status_code
-```python wtt.py -u http://protected.app.local/ -f owasp -t pattern -p Forbidden
+python wtt.py -u http://protected.app.local/ -f owasp -t pattern -p Forbidden
 python wtt.py -u http://protected.app.local/ -f owasp -t regex -p ID:.*
 ```
 
