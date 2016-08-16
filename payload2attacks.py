@@ -28,6 +28,11 @@ def get_arguments():
 						default='./attacks',
 						help='Path to folder where generated attacks should be saved',
 						required=True)
+	parser.add_argument('-m', '--method',
+						dest='method',
+						default='all',
+						help='Attacks with methods, e.g.: get,post,header or all ',
+						required=True)
 	result = parser.parse_args()
 	return result
 
@@ -36,20 +41,20 @@ class Attack():
 	def __init__(self, attack, count, idx, file):
 		"""
 		class of attack, that willb e written to file
-		body:         body for attack-request
+		body:		 body for attack-request
 		description:  attack description
-		headers:      headers for attack-requst
-		id:           attack ID
-		method:       HTTP-method for attack-request
+		headers:	  headers for attack-requst
+		id:		   attack ID
+		method:	   HTTP-method for attack-request
 		status_code:  expected status code (403 - block, any other - pass)
-		url:          url for attack-request
-		
-		
+		url:		  url for attack-request
+
+
 		params:
 		attack  attack,parsed from file
 		count   count of leading zeroes in attack ID
-		idx     current index number of attack
-		file    name of file with payloads
+		idx	 current index number of attack
+		file	name of file with payloads
 		"""
 		self.id = "%s__%s" % (file.split('/')[1].split('.')[0].split('_')[0].upper(),
 			str(idx+1).zfill(count))
@@ -94,14 +99,14 @@ class Attack():
 		self.url = None
 		self.body = None
 		self.method = "GET"
-		self.id = self.id.replace("__", "_%s_" % self.method)
+		self.id = self.id.replace("__", "_%s_" % "HEADER")
 		self.headers = { "Connection": urllib.quote(urllib.unquote(self.payload).encode('utf8')),
 					"User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"}
 
 def get_files(folder):
 	"""
 	get file list from specified folder
-	
+
 	params:
 	folder  folder including files with payloads
 	"""
@@ -114,11 +119,11 @@ def get_files(folder):
 def write_file(method, file, args, data):
 	"""
 	write file with generated attacks
-	
+
 	params:
-	args    CLI arguments
-	data    list with generated attacks
-	file    name of file with payloads
+	args	CLI arguments
+	data	list with generated attacks
+	file	name of file with payloads
 	method  HTTP-method for attacks (GET,POST)
 	"""
 	filename = "%s/%s_%s.json" % (  args.output,
@@ -130,28 +135,32 @@ def write_file(method, file, args, data):
 def main(args):
 	"""
 	main function
-	
+
 	params:
 	args  CLI arguments
 	"""
+	if args.method == "all":
+		methods = ["get","post","header"]
+	else:
+		methods = args.method.split(",")
+
 	filelist = get_files(args.input)
-	for file in filelist:
-		payloads=open(file,'r').readlines()
-		get = list()
-		post = list()
-		header = list()
-		print("Processing file: %s...\t" % (file))
-		for idx,payload in enumerate(payloads):
-			attack = Attack(payload, len(str(len(payloads))), idx, file)
-			attack.set_get()
-			get.append(attack.__dict__)
-			attack.set_post()
-			post.append(attack.__dict__)
-			attack.set_header()
-			header.append(attack.__dict__)
-		write_file('get',file,args,get)
-		write_file('post',file,args,post)
-		write_file('header',file,args,header)
+	for method in methods:
+		print("Method: %s" % method.upper())
+		for file in filelist:
+			payloads=open(file,'r').readlines()
+			temp = list()
+			print("\tProcessing file: %s...\t" % (file))
+			for idx,payload in enumerate(payloads):
+				attack = Attack(payload, len(str(len(payloads))), idx, file)
+				if method == "get":
+					attack.set_get()
+				elif method == "post":
+					attack.set_post()
+				else:
+					attack.set_header()
+				temp.append(attack.__dict__)
+			write_file(method,file,args,temp)
 
 opts = get_arguments()
 main(opts)

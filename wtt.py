@@ -124,7 +124,7 @@ class Url(object):
 		self.host = regex.group(2)
 
 		if (not re.match("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$",
-						  self.host)
+							self.host)
 			and not re.match("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
 							self.host)):
 				raise Exception("invalid hostname")
@@ -145,35 +145,35 @@ class Attack(object):
 
 	def __init__(self,attack):
 		"""
-		body:               body of request
-		description:        attack description
-		headers:            headers of request (dict object)
-		id:                 attack id
-		method:             HTTP-method of request
-		payload:            attack payload, that is checked
-		status_code:        expected status code from server (403: block, other: allow)
-		url:                request URL
+		body:	       body of request
+		description:	attack description
+		headers:	    headers of request (dict object)
+		id:		 attack id
+		method:	     HTTP-method of request
+		payload:	    attack payload, that is checked
+		status_code:	expected status code from server (403: block, other: allow)
+		url:		request URL
 		actual_status_code: status code, recieved by waf of application
-		auth:               auth type (basic/digest/http/None)
-		auth_params:        request parameters to perform authentication
+		auth:	       auth type (basic/digest/http/None)
+		auth_params:	request parameters to perform authentication
 		auth_success:       regex pattern for successful check of http auth
-		auth_url:           url to send authentication request
-		csrf:               csrf status (enabled/disabled)
-		csrf_name:          name of variable, where csrf token is stored
+		auth_url:	   url to send authentication request
+		csrf:	       csrf status (enabled/disabled)
+		csrf_name:	  name of variable, where csrf token is stored
 		csrf_sendname:      name of variable, that should be used in requests
-		csrf_value:         value of csrf variable
-		detect_type:        type of blocked attack detection (status_code/pattern/regex)
-		failed:             indicates, that check was failed
+		csrf_value:	 value of csrf variable
+		detect_type:	type of blocked attack detection (status_code/pattern/regex)
+		failed:	     indicates, that check was failed
 		false_negative:     indicates, that attack should be blocked, but wasn't
 		false_positive:     indicates, that attack shoundn't be blocked, but was
-		file:               file name of currently processed file
-		host:               hostname where requests are sent
-		pattern:            pattern for pattern/requests type of blocked attack detection
+		file:	       file name of currently processed file
+		host:	       hostname where requests are sent
+		pattern:	    pattern for pattern/requests type of blocked attack detection
 		pattern_found:      position (for pattern) or value of found pattern (regex)
-		protocol:           protocol for server connection (http/https)
-		raw_request:        formatted full raw request (for report)
-		response:           response object
-		uri:                url including protocol, host etc.
+		protocol:	   protocol for server connection (http/https)
+		raw_request:	formatted full raw request (for report)
+		response:	   response object
+		uri:		url including protocol, host etc.
 
 		params:
 		attack  single attack from file
@@ -239,15 +239,15 @@ class Attack(object):
 					self.body += "%s=%s" % (self.csrf_sendname, self.csrf_value)
 				else:
 					self.body += "%s=%s" % (self.csrf_name, self.csrf_value)
-		
+
 		self.uri = "%s://%s:%s/%s" % (self.protocol,
 			self.host,
 			url.port,
 			self.url)
-			
+
 		if "Referer" not in self.headers:
 			self.headers["Referer"] = self.uri.split("?")[0]
-		
+
 		request = Request(  self.method.upper(),
 							self.uri,
 							headers=self.headers,
@@ -339,7 +339,7 @@ class Attack(object):
 				sys.exit("ERROR: HTTP authentication failed")
 			else:
 				print("INFO: authentication successful")
-				
+
 
 	def failure_check(self):
 		"""
@@ -422,6 +422,10 @@ def parse_cli_arguments():
 	parser.add_argument('-a', '--useragent',
 		dest='ua',
 		help='Set User-Agent header value')
+	parser.add_argument('--referer',
+		dest='referer',
+		action='store_true',
+		help='Set Referer header value with request hostname')
 	parser.add_argument('-c', '--cookie',
 		dest='cookie',
 		help='Set Cookies informat key1=value1,key2=value2')
@@ -591,7 +595,10 @@ def process_attack(opts):
 	attack.csrf_sendname = args.csrf_sendname
 	attack.detect_type = args.type
 	attack.pattern = args.pattern
-	attack.uri = "%s://%s:%s/%s" % (url.protocol, url.host, url.port, url.path)
+	if (url.protocol == "https" and url.port == 443) or (url.protocol == "http" and url.port == 80):
+		attack.uri = "%s://%s/%s" % (url.protocol, url.host, url.path)
+	else:
+		attack.uri = "%s://%s:%s/%s" % (url.protocol, url.host, url.port, url.path)
 
 	if tqdm_enabled == 1:
 		pbar.update()
@@ -601,6 +608,9 @@ def process_attack(opts):
 
 	if args.ua:
 		attack.headers["User-Agent"] = args.ua
+
+	if args.referer:
+		attack.headers["Referer"] = attack.uri
 
 	if args.health != 0:
 		if random.randint(1,args.health) == 5:

