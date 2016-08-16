@@ -21,6 +21,7 @@ optional arguments:
   -u URL, --url URL     Set WAF address, e.g.http://127.0.0.1/
   -a UA, --useragent UA
                         Set User-Agent header value
+  --referer             Set Referer header value with request hostname
   -c COOKIE, --cookie COOKIE
                         Set Cookies informat key1=value1,key2=value2
   -o OUTPUT, --output OUTPUT
@@ -110,5 +111,6 @@ Attacks should be provided in JSON format and have following structure:
 ## Convert payloads to attack
 If you have only payloads and want to convert it into attacks format, use:
 ```
-python payload2attacks.py -i folder_with_payloads -o folder_for_ready_attacks
+python payload2attacks.py -i folder_with_payloads -o folder_for_ready_attacks -m get,post
+python payload2attacks.py -i folder_with_payloads -o folder_for_ready_attacks -m all
 ```
