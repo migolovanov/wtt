@@ -30,6 +30,8 @@ optional arguments:
                         Detect blocked page based on HTTP response
                         code,pattern or regular expression (default:
                         status_code)
+  --codes CODES         List of status codes for blocked pages
+                        e.g. 403 or 403,500
   -p PATTERN, --pattern PATTERN
                         Detect blocked page based on status code or pattern
   --all                 Include passed attack to report
@@ -66,7 +68,7 @@ python wtt.py -u http://protected.app.local/ -f owasp --auth http --auth-params 
 
 ### Set blocked attacks criteria
 ```
-python wtt.py -u http://protected.app.local/ -f owasp -t status_code
+python wtt.py -u http://protected.app.local/ -f owasp -t status_code 403,500
 python wtt.py -u http://protected.app.local/ -f owasp -t pattern -p Forbidden
 python wtt.py -u http://protected.app.local/ -f owasp -t regex -p ID:.*
 ```
@@ -104,6 +106,7 @@ Attacks should be provided in JSON format and have following structure:
       "User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"
    }, # list of used headers (in )
    "body": null, # body for POST-requests
+   "block": true # shows if this attack is intended to be blocked
    "payload": "adsf' or 1=1 -- 1" # payload in raw form
 }
 ```

@@ -588,12 +588,13 @@ table.options-table {
 {% if attack.failed|int == 1 %}
 			<div class="attack">
 				<div class="attack-header">
-					{% if attack.status_code|string != "403" %}
+					{% if attack.false_positive %}
 					<div class="attack-level"></div>
 					<div class="attack-main-info">
 						<div class="attack-type-name-level-medium">False Positive {% if attack.id %} - {{attack.id}}{% endif %}</div>
 					</div>
-					{% else %}
+					{% endif %}
+					{% if attack.false_negative %}
 					<div class="attack-level"></div>
 					<div class="attack-main-info">
 						<div class="attack-type-name-level-high">False Negative {% if attack.id %} - {{attack.id}}{% endif %}</div>
@@ -653,11 +654,11 @@ table.options-table {
                     {% endif %}
 										<tr>
 											<td class="option-description">Expected result</td>
-											<td class="option-value"><pre>{% if attack.status_code|int == 403 %}Block{% else %}Pass{% endif %}</pre></td>
+											<td class="option-value"><pre>{% if attack.block %}Block{% else %}Pass{% endif %}</pre></td>
 										</tr>
 										<tr>
 											<td class="option-description">Actual result</td>
-											<td class="option-value"><pre>{% if attack.failed == True %}Passed{% else %}Blocked{% endif %}</pre></td>
+											<td class="option-value"><pre>{% if attack.failed == attack.block %}Passed{% else %}Blocked{% endif %}</pre></td>
 										</tr>
 										<tr>
 											<td class="option-description">Response length</td>
@@ -738,11 +739,11 @@ table.options-table {
                     {% endif %}
 										<tr>
 											<td class="option-description">Expected result</td>
-											<td class="option-value"><pre>{% if attack.status_code|int == 403 %}Block{% else %}Pass{% endif %}</pre></td>
+											<td class="option-value"><pre>{% if attack.block %}Block{% else %}Pass{% endif %}</pre></td>
 										</tr>
 										<tr>
 											<td class="option-description">Actual result</td>
-											<td class="option-value"><pre>{% if attack.failed == True %}Passed{% else %}Blocked{% endif %}</pre></td>
+											<td class="option-value"><pre>{% if attack.failed == attack.block %}Passed{% else %}Blocked{% endif %}</pre></td>
 										</tr>
 										<tr>
 											<td class="option-description">Response length</td>

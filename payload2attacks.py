@@ -60,6 +60,7 @@ class Attack():
 			str(idx+1).zfill(count))
 		self.method = "GET"
 		self.status_code = 403
+		self.block = True
 		try:
 			self.payload = attack.decode('utf8')
 		except:

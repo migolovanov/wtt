@@ -40,10 +40,10 @@ class Bar(object):
 
 	def __init__(self):
 		"""
-		desc:     label of progressbar (file name)
+		desc:	 label of progressbar (file name)
 		position: line number of progress bar (file position in array)
 		progress: bar object itself
-		total:    total number of attacks in file
+		total:	total number of attacks in file
 		"""
 
 		self.desc = None
@@ -56,9 +56,9 @@ class Bar(object):
 		set progress bar with specified parameters
 
 		params:
-		desc      label of progressbar (file name)
+		desc	  label of progressbar (file name)
 		position  line number of progress bar (file position in array)
-		total     total number of attacks in flie
+		total	 total number of attacks in flie
 		"""
 
 		self.total = total
@@ -95,10 +95,10 @@ class Url(object):
 	def __init__(self):
 		"""
 		parameters: request GET-parameters from URL
-		path:       path to specified URL
+		path:		path to specified URL
 		port:		port to connect
-		protocol:   protocol used to connect (http/https)
-		host:       host used to connect (ip address/hostname)
+		protocol:	protocol used to connect (http/https)
+		host:		host used to connect (ip address/hostname)
 		"""
 
 		self.parameters = ""
@@ -145,47 +145,49 @@ class Attack(object):
 
 	def __init__(self,attack):
 		"""
-		body:	       body of request
+		body:		body of request
+		block:		shows if attack should be blocked
 		description:	attack description
-		headers:	    headers of request (dict object)
-		id:		 attack id
-		method:	     HTTP-method of request
-		payload:	    attack payload, that is checked
+		headers:	headers of request (dict object)
+		id:		attack id
+		method:		HTTP-method of request
+		payload:	attack payload, that is checked
 		status_code:	expected status code from server (403: block, other: allow)
 		url:		request URL
 		actual_status_code: status code, recieved by waf of application
-		auth:	       auth type (basic/digest/http/None)
+		auth:		auth type (basic/digest/http/None)
 		auth_params:	request parameters to perform authentication
-		auth_success:       regex pattern for successful check of http auth
-		auth_url:	   url to send authentication request
-		csrf:	       csrf status (enabled/disabled)
-		csrf_name:	  name of variable, where csrf token is stored
-		csrf_sendname:      name of variable, that should be used in requests
-		csrf_value:	 value of csrf variable
+		auth_success:	regex pattern for successful check of http auth
+		auth_url:	url to send authentication request
+		csrf:		csrf status (enabled/disabled)
+		csrf_name:	name of variable, where csrf token is stored
+		csrf_sendname:	name of variable, that should be used in requests
+		csrf_value:	value of csrf variable
 		detect_type:	type of blocked attack detection (status_code/pattern/regex)
-		failed:	     indicates, that check was failed
-		false_negative:     indicates, that attack should be blocked, but wasn't
-		false_positive:     indicates, that attack shoundn't be blocked, but was
-		file:	       file name of currently processed file
-		host:	       hostname where requests are sent
-		pattern:	    pattern for pattern/requests type of blocked attack detection
-		pattern_found:      position (for pattern) or value of found pattern (regex)
-		protocol:	   protocol for server connection (http/https)
+		failed:		indicates, that check was failed
+		false_negative:	indicates, that attack should be blocked, but wasn't
+		false_positive:	indicates, that attack shoundn't be blocked, but was
+		file:		file name of currently processed file
+		host:		hostname where requests are sent
+		pattern:	pattern for pattern/requests type of blocked attack detection
+		pattern_found:	position (for pattern) or value of found pattern (regex)
+		protocol:	protocol for server connection (http/https)
 		raw_request:	formatted full raw request (for report)
-		response:	   response object
+		response:	response object
 		uri:		url including protocol, host etc.
 
 		params:
-		attack  single attack from file
+		attack		single attack from file
 		"""
 
 		self.body = attack["body"]
+		self.block = attack["block"]
 		self.description = attack["description"]
 		self.headers = attack["headers"]
 		self.id = attack["id"]
 		self.method = attack["method"]
 		self.payload = attack["payload"]
-		self.status_code = attack["status_code"]
+		self.status_code = str(attack["status_code"]).split(",")
 		self.url = attack["url"]
 		self.actual_status_code = None
 		self.auth = None
@@ -214,8 +216,8 @@ class Attack(object):
 		prepare request and sends it to server
 
 		params:
-		url      Url object with parsed URL
-		session  current requests session
+		url	Url object with parsed URL
+		session	current requests session
 		"""
 		if "Connection" not in self.headers:
 			self.headers["Connection"] = "keep-alive"
@@ -267,8 +269,8 @@ class Attack(object):
 		perform GET-request to retrieve CSRF-token
 
 		params:
-		url      Url object with parsed URL
-		session  current requests session
+		url	Url object with parsed URL
+		session	current requests session
 		"""
 
 		request = Request("GET", url, headers=self.headers, cookies=session.cookies)
@@ -286,7 +288,7 @@ class Attack(object):
 
 	def auth_basic_digest(self):
 		"""
-		return data for basic/digest auth
+		return	data for basic/digest auth
 		"""
 
 		params = dict()
@@ -310,7 +312,7 @@ class Attack(object):
 		send request to http auth
 
 		params:
-		session  current requests session
+		session	current requests session
 		"""
 
 		params = dict()
@@ -319,8 +321,8 @@ class Attack(object):
 		result = ""
 
 		for key in params:
-			result += "%s=%s&" % (urllib.quote(key),
-								urllib.quote(params[key]))
+			result += "%s=%s&" % (	urllib.quote(key),
+						urllib.quote(params[key]))
 		result = re.sub(r'&$', '', result)
 
 		if self.csrf:
@@ -331,34 +333,46 @@ class Attack(object):
 		else:
 			result += "&%s=%s" % (self.csrf_name, self.csrf_value)
 		response = session.post( self.auth_url,
-								headers=self.headers,
-								data=result,
-								cookies=session.cookies)
+					headers=self.headers,
+					data=result,
+					cookies=session.cookies)
 		if self.auth_success:
 			if re.findall(r"%s" % str(self.auth_success), response.text) == []:
-				sys.exit("ERROR: HTTP authentication failed")
+				print("ERROR: HTTP authentication failed with response code: %s" % response.status_code)
+				try:
+					decision = raw_input("Show response body? [yn] ")
+				except:
+					decision = input("Show response body? [yn] ")
+				if decision in ["y","Y"]:
+					sys.exit(response.text)
+				else:
+					sys.exit()
 			else:
 				print("INFO: authentication successful")
-
 
 	def failure_check(self):
 		"""
 		Check if test is failed and if it is false negative/positive
 		"""
-
 		if self.detect_type == "status_code":
-			if  int(self.status_code) != int(self.actual_status_code):
-				self.failed = True
-				if  int(self.status_code) == 403:
+			if  str(self.actual_status_code) in self.status_code:
+				if self.block:
+					self.failed = False
+					self.false_negative = False
+					self.false_positive = False
+				else:
+					self.failed = True
+					self.false_negative = False
+					self.false_positive = True
+			else:
+				if self.block:
+					self.failed = True
 					self.false_negative = True
 					self.false_positive = False
 				else:
-					self.false_positive = True
+					self.failed = False
+					self.false_positive = False
 					self.false_negative = False
-			else:
-				self.failed = False
-				self.false_negative = False
-				self.false_positive = False
 		elif self.detect_type == "pattern":
 			self.pattern_found = self.response.find(self.pattern)
 			if self.pattern_found == -1:
@@ -437,8 +451,11 @@ def parse_cli_arguments():
 		dest='type',
 		default='status_code',
 		help=('Detect blocked page based on HTTP response code,'
-				'pattern or regular expression (default: status_code)'),
+			'pattern or regular expression (default: status_code)'),
 		choices=["status_code", "pattern", "regex"])
+	parser.add_argument('--codes',
+		dest='codes',
+		help='List of status codes for blocked pages, e.g. 403 or 403,500')
 	parser.add_argument('-p', '--pattern',
 		dest='pattern',
 		help='Detect blocked page based on status code or pattern')
@@ -488,6 +505,9 @@ def parse_cli_arguments():
 	if result.type == "status_code" and result.pattern:
 		parser.print_help()
 		sys.exit("ERROR: invalid option PATTERN for status_code type.")
+
+	if result.codes:
+		result.status_codes = result.codes.split(',')
 
 	if result.csrf == True and not result.csrf_name:
 		parser.print_help()
@@ -595,6 +615,8 @@ def process_attack(opts):
 	attack.csrf_sendname = args.csrf_sendname
 	attack.detect_type = args.type
 	attack.pattern = args.pattern
+	if args.codes:
+		attack.status_code = args.codes
 	if (url.protocol == "https" and url.port == 443) or (url.protocol == "http" and url.port == 80):
 		attack.uri = "%s://%s/%s" % (url.protocol, url.host, url.path)
 	else:
@@ -619,7 +641,7 @@ def process_attack(opts):
 	try:
 		attack.send(url, session)
 	except exceptions.ConnectionError as err:
-		print("WARNING: attack send error: %s " % err)
+		print("WARNING: attack %s send error: %s " % (attack.id, err))
 		return None
 
 	attack.failure_check()
@@ -656,7 +678,7 @@ def generate_report(attacks,args):
 	"""
 	generate report based on report.jinja2 template
 
-	args     parsed CLI arguments
+	args	 parsed CLI arguments
 	attacks  list with test results
 	"""
 
@@ -666,11 +688,11 @@ def generate_report(attacks,args):
 
 	template = Template(open(args.report_template,'r').read())
 	report = template.render(host=attacks[0]["host"],
-							protocol=attacks[0]["protocol"],
-							count=OrderedDict(count),
-							attacks=attacks,
-							all=args.all,
-							date=time.strftime("%d %B %Y %H:%M:%S"))
+				protocol=attacks[0]["protocol"],
+				count=OrderedDict(count),
+				attacks=attacks,
+				all=args.all,
+				date=time.strftime("%d %B %Y %H:%M:%S"))
 
 	try:
 		with codecs.open(args.output,'w','utf-8') as output:
@@ -683,11 +705,11 @@ def initial_auth_http(args, session):
 	perform http auth (before attack processing)
 
 	params:
-	args     parsed CLI arguments
+	args	 parsed CLI arguments
 	session  current requests session
 	"""
 
-	attack = Attack({"body": None, "description": None, "url": None, "status_code": 403, "id": "AUTH", "headers": {"Connection": "keep-alive", "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"}, "method": "POST", "payload": ""})
+	attack = Attack({"body": None, "description": None, "url": None, "status_code": 403, "id": "AUTH", "headers": {"Connection": "keep-alive", "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"}, "method": "POST", "payload": "", "block": False})
 	attack.detect_type = args.type
 	attack.pattern = args.pattern
 	attack.csrf = args.csrf
@@ -731,7 +753,8 @@ def main_function(tqdm_enabled):
 					filelist.index(filename))
 		else:
 			print("Processing file: %s" % filename)
-		process_attack([attacks[0],url,session,args,sharedattacks,filename,pbar,tqdm_enabled])
+# DEBUG
+#		process_attack([attacks[0],url,session,args,sharedattacks,filename,pbar,tqdm_enabled])
 		pool.map(   process_attack,
 					zip(attacks,
 						repeat(url),
@@ -742,6 +765,7 @@ def main_function(tqdm_enabled):
 						repeat(pbar),
 						repeat(tqdm_enabled)))
 
+	print("\n" * len(filelist))
 	print("\nGenerating report...\t")
 	generate_report(sorted(sharedattacks, key=lambda k: k["id"]), args)
 	print("ok")
