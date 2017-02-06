@@ -11,7 +11,8 @@ try:
 except:
 	import urllib
 
-
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 def get_arguments():
 	"""
@@ -56,7 +57,7 @@ class Attack():
 		idx	 current index number of attack
 		file	name of file with payloads
 		"""
-		self.id = "%s__%s" % (file.split('/')[1].split('.')[0].split('_')[0].upper(),
+		self.id = "%s__%s" % (file.split('/')[1].split('.')[0].upper(),
 			str(idx+1).zfill(count))
 		self.method = "GET"
 		self.status_code = 403
@@ -77,7 +78,7 @@ class Attack():
 		self.body = None
 		self.method = "GET"
 		self.id = self.id.replace("__", "_%s_" % self.method)
-		self.url = "?test=%s" % urllib.quote(urllib.unquote(self.payload).encode('utf8'))
+		self.url = "?test=%s" % urllib.quote(urllib.unquote(re.sub(r"%2[bB]","%252B",self.payload)).encode('utf8')).replace("%2B","+").replace("%252B","%2B")
 		self.headers = { "Connection": "close",
 					"User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"}
 
@@ -88,7 +89,7 @@ class Attack():
 		self.url = None
 		self.method = "POST"
 		self.id = self.id.replace("__", "_%s_" % self.method)
-		self.body = "test=%s" % urllib.quote(urllib.unquote(self.payload).encode('utf8'))
+		self.body = "test=%s" % urllib.quote(urllib.unquote(re.sub(r"%2[bB]","%252B",self.payload)).encode('utf8')).replace("%2B","+").replace("%252B","%2B")
 		self.headers = { "Connection": "close",
 					"User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36",
 					"Content-Type": "application/x-www-form-urlencoded"}
@@ -101,7 +102,7 @@ class Attack():
 		self.body = None
 		self.method = "GET"
 		self.id = self.id.replace("__", "_%s_" % "HEADER")
-		self.headers = { "Connection": urllib.quote(urllib.unquote(self.payload).encode('utf8')),
+		self.headers = { "Connection": urllib.quote(urllib.unquote(re.sub(r"%2[bB]","%252B",self.payload)).encode('utf8')).replace("%2B","+").replace("%252B","%2B"),
 					"User-Agent": "Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"}
 
 def get_files(folder):
@@ -128,7 +129,7 @@ def write_file(method, file, args, data):
 	method  HTTP-method for attacks (GET,POST)
 	"""
 	filename = "%s/%s_%s.json" % (  args.output,
-									file.split('/')[1].split('.')[0].split('_')[0].lower(),
+									file.split('/')[1].split('.')[0].lower(),
 									method)
 	with open(filename, 'w') as f:
 		json.dump(data, f)
@@ -153,6 +154,7 @@ def main(args):
 			temp = list()
 			print("\tProcessing file: %s...\t" % (file))
 			for idx,payload in enumerate(payloads):
+				payload = re.sub(r'\r?\n$','',payload)
 				attack = Attack(payload, len(str(len(payloads))), idx, file)
 				if method == "get":
 					attack.set_get()

