@@ -377,7 +377,7 @@ class Attack(object):
 			self.pattern_found = self.response.find(self.pattern)
 			if self.pattern_found == -1:
 				self.failed = True
-				if int(self.status_code) == 403:
+				if int(self.status_code[0]) == 403:
 					self.false_negative = True
 					self.false_positive = False
 				else:
@@ -391,7 +391,7 @@ class Attack(object):
 			self.pattern_found = re.findall(r"%s" % self.pattern, self.response)
 			if self.pattern_found == []:
 				self.failed = True
-				if int(self.status_code) == 403:
+				if int(self.status_code[0]) == 403:
 					self.false_negative = True
 					self.false_positive = False
 				else:
@@ -410,9 +410,9 @@ class Attack(object):
 				self.uri.split("?")[0],
 				headers={"User-Agent":"Mozilla/5.0 Windows NT 6.3; Win64; x64 AppleWebKit/537.36 KHTML, like Gecko Chrome/44.0.2403.107 Safari/537.36"},
 				cookies=session.cookies)
-			if ((self.detect_type == "status_code" and int(response.status_code) == 403)
-				or (self.detect_type == "pattern" and response.response.find(response.pattern) != -1)
-				or (self.detect_type == "regex" and re.findall(r"%s" % response.pattern, response.response) != [])):
+			if ((self.detect_type == "status_code" and str(self.actual_status_code) in self.status_code)
+				or (self.detect_type == "pattern" and response.text.find(self.pattern) != -1)
+				or (self.detect_type == "regex" and re.findall(r"%s" % self.pattern, response.text) != [])):
 				print("WARNING: Application health-check failed (are we blocked?)")
 		except:
 			print("ERROR: Can't send request to server (are we blocked?)")
